@@ -43,3 +43,4 @@ Route::get("cactransapdienra/{id}","API\Chitietdoibongs@cactransapdienra");
 Route::get("cactransapdienracuadoi/{id}","API\Chitietdoibongs@cactransapdienracuadoi");
 Route::get("cactrandaketthuc/{id}","API\Chitietdoibongs@cactrandaketthuc");
 Route::post("voteketqua","API\Chitietdoibongs@voteketqua");
+Route::get("xephang","API\Chitietdoibongs@bangxephang");

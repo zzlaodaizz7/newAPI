@@ -8,7 +8,7 @@ class dangtin extends Model
 {
     //
     protected $table = "dangtin";
-    protected $fillable=[ 'id','id_doitimdoi', 'doibatdoi', 'id_san', 'id_khunggio', 'ngay','keo','voted' ];
+    protected $fillable=[ 'id','doidangtin_id', 'doibatdoi_id', 'san_id', 'khunggio_id', 'ngay','keo','voted' ];
     public function batdoi()
 	{
 	    return $this->hasMany('App\batdoi');

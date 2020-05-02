@@ -18,17 +18,19 @@ class Chitietdoibongs extends Controller
     	return doibong::find($id);
     }
     public function dsthanhvien($id){
-    	$a = doibong_nguoidung::where('doibong_id',$id)->get();
-        echo "[";
-        $sl = $a->count();
-        $sll = 0;
+    	$a = doibong_nguoidung::where([['doibong_id',$id],['trangthai',1]])->get();
+        $listdata=[];
+        
         foreach ($a as $key => $value) {
-            $sll++;
             $z = User::find($value->user_id);
-            echo $z;
-            if($sll != $sl) echo ",";
+            array_push($listdata,$z);
         }
-        echo "]";
+        json_encode($listdata);
+        foreach ($a as $key => $value) {
+            $listdata[$key]['phanquyen_id'] = $value->phanquyen_id;
+        }
+        json_encode($listdata);   
+        return $listdata;
 
     }
     public function list($id){
@@ -140,6 +142,22 @@ class Chitietdoibongs extends Controller
         $a->doibatdoi   = $req->doibatdoi;
         $b = dangtin::find($req->dangtin_id);
         $b->voted = 1;
+        if ($req->doidangtin > $req->doibatdoi) {
+            $c = doibong::find(dangtin::find($req->dangtin_id)->doidangtin_id);
+            $c->sodiem = $c->sodiem+3;
+            $c->save();
+        }else if($req->doidangtin < $req->doibatdoi){
+            $c = doibong::find(dangtin::find($req->dangtin_id)->doibatdoi_id);
+            $c->sodiem = $c->sodiem+3;
+            $c->save();
+        }else{
+            $c = doibong::find(dangtin::find($req->dangtin_id)->doidangtin_id);
+            $c->sodiem = $c->sodiem+1;
+            $c->save();
+            $d = doibong::find(dangtin::find($req->dangtin_id)->doibatdoi_id);
+            $d->sodiem = $c->sodiem+1;
+            $d->save();
+        }
         $b->save();
         $a->save();
         return Response::json([
@@ -147,7 +165,8 @@ class Chitietdoibongs extends Controller
             'title' => 'Thành công!',
             'content' => 'Vote thành công',
         ]);
-        
-
+    }
+    public function bangxephang(){
+        return doibong::orderBy("sodiem","DESC")->get();
     }
 }
