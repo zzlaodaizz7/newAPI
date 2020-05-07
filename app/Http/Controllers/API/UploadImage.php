@@ -21,5 +21,4 @@ class UploadImage extends Controller
             echo $getanhbia;
         }
     } 
-
 }

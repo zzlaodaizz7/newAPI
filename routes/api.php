@@ -21,10 +21,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', 'API\Nguoidungs@login');
 Route::post('register', 'API\Nguoidungs@register');
 Route::group(['middleware' => 'auth:api'], function(){
-	
+	Route::post("votehanhkiem","API\Hanhkiems@hanhkiem");
+	Route::resource('dangtin','API\Dangtins');
 });
 Route::resource('batdoi','API\Batdois');
-Route::resource('dangtin','API\Dangtins');
 Route::resource('thanhvien','API\DoibongNguoidung');
 Route::resource('doibong','API\Doibongs');
 Route::resource('nguoidung','API\Nguoidungs');
@@ -44,3 +44,5 @@ Route::get("cactransapdienracuadoi/{id}","API\Chitietdoibongs@cactransapdienracu
 Route::get("cactrandaketthuc/{id}","API\Chitietdoibongs@cactrandaketthuc");
 Route::post("voteketqua","API\Chitietdoibongs@voteketqua");
 Route::get("xephang","API\Chitietdoibongs@bangxephang");
+Route::get('cacdoidangthamgia/{id}', 'API\DoibongNguoidung@getCacDoiDangThamGia');
+Route::get("thongbao/{id}","API\Chitietdoibongs@thongbao");

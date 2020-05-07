@@ -9,5 +9,5 @@ class thongbao extends Model
     //
     protected $table = "thongbao";
 
-    protected $fillable=[ 'id', 'noidung','id_nguoidung','loaithongbao','device'];
+    protected $fillable=[ 'id', 'noidung','user_id','loaithongbao','device'];
 }

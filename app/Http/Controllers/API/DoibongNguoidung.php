@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\doibong_nguoidung;
 use Response;
+use App\doibong;
+// use App\thongbao;
 class DoibongNguoidung extends Controller
 {
     /**
@@ -46,6 +48,7 @@ class DoibongNguoidung extends Controller
         $a->trangthai = 0;
         if ($a->save()) {
             return Response::json([
+                    'id' =>$a->id,
                     'type' => 'success',
                     'title' => 'Thành công!',
                     'content' => 'Xin vào đội thành công!',
@@ -95,6 +98,7 @@ class DoibongNguoidung extends Controller
     {
         //
         $a = doibong_nguoidung::find($id);
+        $a->phanquyen_id = 2;
         $a->trangthai = 1;
         if($a->save()){
             return Response::json([
@@ -131,5 +135,19 @@ class DoibongNguoidung extends Controller
             'content' => 'Xóa thành viên thành công!',
         ]);
         
+    }
+
+    public function getCacDoiDangThamGia($id){
+        $a = doibong_nguoidung::where('user_id',$id)->get();
+        $list = [];
+        foreach ($a as $key => $value){
+            array_push($list, $value);
+        }
+        foreach ($a as $key => $value){
+            $list[$key]['doibong'] = doibong::find($value->doibong_id);
+        }
+        json_encode($list);
+        return $list;
+
     }
 }

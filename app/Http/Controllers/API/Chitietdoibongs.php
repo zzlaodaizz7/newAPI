@@ -10,6 +10,7 @@ use App\User;
 use App\dangtin;
 use Carbon\Carbon;
 use Response;
+use App\thongbao;
 use App\ketqua;
 class Chitietdoibongs extends Controller
 {
@@ -18,19 +19,28 @@ class Chitietdoibongs extends Controller
     	return doibong::find($id);
     }
     public function dsthanhvien($id){
-    	$a = doibong_nguoidung::where([['doibong_id',$id],['trangthai',1]])->get();
-        $listdata=[];
-        
-        foreach ($a as $key => $value) {
-            $z = User::find($value->user_id);
-            array_push($listdata,$z);
+    	// $a = doibong_nguoidung::where([['doibong_id',$id],['trangthai',1]])->get();
+     //    $listdata=[];
+     //    foreach ($a as $key => $value) {
+     //        $z = User::find($value->user_id);
+     //        array_push($listdata,$z);
+     //    }
+     //    json_encode($listdata);
+     //    foreach ($a as $key => $value) {
+     //        $listdata[$key]['phanquyen_id'] = $value->phanquyen_id;
+     //    }
+     //    json_encode($listdata);   
+     //    return $listdata;
+        $a = doibong_nguoidung::where('doibong_id',$id)->get();
+        $list = [];
+        foreach ($a as $key => $value){
+            array_push($list, $value);
         }
-        json_encode($listdata);
-        foreach ($a as $key => $value) {
-            $listdata[$key]['phanquyen_id'] = $value->phanquyen_id;
+        foreach ($a as $key => $value){
+            $list[$key]['user'] = User::find($value->user_id);
         }
-        json_encode($listdata);   
-        return $listdata;
+        json_encode($list);
+        return $list;
 
     }
     public function list($id){
@@ -168,5 +178,8 @@ class Chitietdoibongs extends Controller
     }
     public function bangxephang(){
         return doibong::orderBy("sodiem","DESC")->get();
+    }
+    public function thongbao($id){
+        return thongbao::where("user_id",$id)->orderBy("created_at","DESC")->get();
     }
 }
