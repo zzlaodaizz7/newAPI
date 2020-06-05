@@ -11,6 +11,8 @@ use App\dangtin;
 use Carbon\Carbon;
 use Response;
 use App\thongbao;
+use App\sanbong;
+use App\khunggio;
 use App\ketqua;
 class Chitietdoibongs extends Controller
 {
@@ -181,5 +183,42 @@ class Chitietdoibongs extends Controller
     }
     public function thongbao($id){
         return thongbao::where("user_id",$id)->orderBy("created_at","DESC")->get();
+    }
+    public function postthongbao(Request $req){
+        $a = new thongbao;
+        $a->user_id         = $req->user_id;
+        $a->noidung         = $req->noidung;
+        $a->loaithongbao    = $req->loaithongbao;
+        $a->device          = $req->device;
+        $a->save();
+    }
+    public function getchitiettindang($id){
+        $a = dangtin::find($id);
+        // echo $a->doidangtin_id;
+        $doidangtin_ten = doibong::find($a->doidangtin_id)->ten;
+        $iddoitruongdoidangtin = doibong_nguoidung::where([['doibong_id',$a->doidangtin_id],['phanquyen_id',1]])->first()->user_id;
+        $device = User::find($iddoitruongdoidangtin)->device;
+        $ngay = $a->ngay;
+        $trangthai = $a->trangthai;
+        $trinhdo = doibong::find($a->doidangtin_id)->trinhdo;
+        $keo    = $a->keo;
+        if ($a->san_id==-1) {
+            $san_ten = "";
+        }else{
+            $san_ten = sanbong::find($a->san_id)->ten;
+        }
+        $khunggio_thoigian = khunggio::find($a->khunggio_id)->thoigian;
+        // return $khunggio_thoigian;
+        return Response::json([
+            'doidangtin_id'             => $a->doidangtin_id,
+            'doidangtin_ten'            => $doidangtin_ten,
+            'device'                    => $device, 
+            'ngay'                      => $a->ngay,
+            'doitruongdoidangtin_id'    => $iddoitruongdoidangtin,
+            'keo'                       => $a->keo,
+            'san_ten'                   => $san_ten,
+            'trinhdo'                   => $trinhdo,
+            'khunggio_thoigian'         => $khunggio_thoigian
+        ]);
     }
 }

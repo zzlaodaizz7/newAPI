@@ -12,7 +12,7 @@ class Hanhkiems extends Controller
     //
     public function hanhkiem(Request $req){
     	$a = new hanhkiem;
-    	$a->user_id = $req->user_id;
+    	$a->user_id = 0;
     	$a->doiduocvote_id = $req->doiduocvote_id;
     	$a->hanhkiem = $req->hanhkiem;
     	$a->save();
@@ -26,7 +26,6 @@ class Hanhkiems extends Controller
     	$c = doibong::find($req->doiduocvote_id);
     	$c->hanhkiem = round($sodiem/count($b));
     	$c->save();
-    	echo round($sodiem/count($b));
     	return Response::json([
 	        'type' => 'success',
 	        'title' => 'Thành công!',

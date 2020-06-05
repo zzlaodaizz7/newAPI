@@ -12,7 +12,6 @@ class UploadImage extends Controller
     { 
         $getanhbia = '';
         if($req->hasFile('uploaded_file')){
-        
             //Lưu hình ảnh vào thư mục public/images
             $anhbia = $req->file('uploaded_file');
             $getanhbia = time().'_'.$anhbia->getClientOriginalName();

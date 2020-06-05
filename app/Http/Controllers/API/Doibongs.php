@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\doibong;
 use App\doibong_nguoidung;
+use App\doibong_khunggio;
 use Response;
 class Doibongs extends Controller
 {
@@ -40,14 +41,21 @@ class Doibongs extends Controller
     public function store(Request $req)
     {
         //
+        // echo ($req->arrGio[2]);
         $doibong = new doibong;
         $doibong->ten = $req->ten;
         $doibong->trinhdo = $req->trinhdo;
         $doibong->diachi = $req->diachi;
         $doibong->sdt = $req->sdt;
         $doibong->save();
-        $a = new doibong_nguoidung;
         $doibongFisrt = doibong::orderByDesc('id')->first();
+        for ($i=0; $i < count($req->arrGio); $i++) {
+            $b = new doibong_khunggio;
+            $b->doibong_id = $doibongFisrt->id;
+            $b->khunggio_id = $req->arrGio[$i];
+            $b->save();
+        }
+        $a = new doibong_nguoidung;
         $a->doibong_id = $doibongFisrt->id;
         $a->user_id = $req->user_id;
         $a->phanquyen_id = 1;
@@ -100,12 +108,19 @@ class Doibongs extends Controller
     {
         //
         $doibong = doibong::find($id);
-        $doibong->hanhkiem = $request->hanhkiem;
-        $doibong->sodiem = $request->sodiem;
+        $doibong->ten = $request->ten;
+        $doibong->trinhdo = $request->trinhdo;
+        $doibong->diachi = $request->diachi;
+        $doibong->sdt = $request->sdt;
         $doibong->save();
-        $doibongupdate = $request->all();
-        $doibong->update($doibongupdate);
-
+        $xoa = doibong_khunggio::where('doibong_id',$id)->delete();
+        for ($i=0; $i < count($request->arrGio); $i++) { 
+            $b = new doibong_khunggio;
+            $b->doibong_id = $id;
+            $b->khunggio_id = $request->arrGio[$i];
+            $b->save();
+        }
+        return 1;
     }
 
     /**

@@ -17,20 +17,20 @@ class Nguoidungs extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    // public function index()
-    // {
-    //     //
-    // }
+    public function index()
+    {
+        //
+    }
 
     // /**
     //  * Show the form for creating a new resource.
     //  *
     //  * @return \Illuminate\Http\Response
     //  */
-    // public function create()
-    // {
-    //     //
-    // }
+    public function create()
+    {
+        //
+    }
 
     // *
     //  * Store a newly created resource in storage.
@@ -82,14 +82,16 @@ class Nguoidungs extends Controller
     public function update(Request $request, $id)
     {
         //
+
         $nguoidung = User::find($id);
         $nguoidungupdate = $request->all();
-        echo $nguoidung->update($nguoidungupdate);
+        $nguoidung->update($nguoidungupdate);
         if ($request->matkhau) {
             $passnew = hash::make($request->matkhau);
-            echo $nguoidung->matkhau = $passnew;
+            $nguoidung->matkhau = $passnew;
             $nguoidung->save();
         }
+        $nguoidung->save();
     }
 
     /**
@@ -121,6 +123,7 @@ class Nguoidungs extends Controller
                 'device'=> $user->device,
                 'sdt'   => $user->sdt,
                 'anhbia'=> $user->anhbia,
+                'diachi'=> $user->diachi,
                 'created_at'=>$user->created_at
                                     ], $this-> successStatus); 
         }

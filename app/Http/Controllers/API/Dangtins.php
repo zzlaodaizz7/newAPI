@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\dangtin;
 use Response;
+use App\doibong_khunggio;
+use App\User;
+use App\doibong_nguoidung;
 class Dangtins extends Controller
 {
     /**
@@ -46,7 +49,7 @@ class Dangtins extends Controller
             return Response::json([
                 'type' => 'error',
                 'title' => 'Lỗi!',
-                'content' => 'Đăng tin trùng ngày và khung giờ',
+                'content' => 'Đăng tin trùng ngày và khung giờ'
             ]);
         }else{
             $dangtin = new dangtin;
@@ -56,11 +59,24 @@ class Dangtins extends Controller
             $dangtin->san_id = $req->san_id;
             $dangtin->khunggio_id = $req->khunggio_id;
             if ($dangtin->save()) {
+                $doitrungkhunggio = doibong_khunggio::where('khunggio_id',$req->khunggio_id)->get();
+
+                $listuserdoitruong = [];
+                $listdoibong       = [];
+                foreach ($doitrungkhunggio as $key => $value) {
+                    $iddoitruong = doibong_nguoidung::where([['doibong_id',$value->doibong_id],['phanquyen_id',1]])->first();
+                    array_push($listdoibong, $iddoitruong);
+                    array_push($listuserdoitruong, User::find($iddoitruong->user_id));
+                }
                 return Response::json([
                     'type' => 'success',
                     'title' => 'Thành công!',
                     'content' => 'Đăng tin thành công',
+                    'id'    =>  dangtin::select("id")->orderByDesc('id')->first()->id,
+                    'listgoiy' => $listuserdoitruong
+                    // 'listdoi'  => $listdoibong
                 ]);
+             
             };
         }
         

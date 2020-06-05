@@ -127,7 +127,6 @@ class DoibongNguoidung extends Controller
     public function destroy($id)
     {
         //
-
         $a = doibong_nguoidung::find($id)->delete();
         return Response::json([
             'type' => 'success',
