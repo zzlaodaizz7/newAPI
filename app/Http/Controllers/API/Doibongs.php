@@ -108,6 +108,8 @@ class Doibongs extends Controller
     {
         //
         $doibong = doibong::find($id);
+        $doibong->anhbia = $request->anhbia;
+        $doibong->anhdaidien = $request->anhdaidien;
         $doibong->ten = $request->ten;
         $doibong->trinhdo = $request->trinhdo;
         $doibong->diachi = $request->diachi;
